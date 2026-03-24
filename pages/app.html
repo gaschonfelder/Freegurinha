@@ -1481,7 +1481,7 @@
 <body>
   <header class="topbar">
     <button class="btn btn-ghost mobile-menu-toggle" id="btnMenu" aria-label="Abrir menu" aria-expanded="false">☰</button>
-    <a class="logo-text" href="landing.html">Free<span>gurinha</span></a>
+    <a class="logo-text" href="/pages/landing.html">Free<span>gurinha</span></a>
     <div class="top-div"></div>
     <div class="top-stats">
       <div class="ts ts-o"><b id="stO">—</b> tenho</div>
@@ -1490,7 +1490,6 @@
       <div class="ts ts-p"><b id="stP">0%</b> completo</div>
     </div>
     <div class="top-actions">
-      <button class="btn btn-ghost" id="btnLogout" title="Sair" onclick="doLogout()">&#8594; Sair</button>
       <button class="btn btn-ghost" id="btnReset" title="Resetar">↺<span>Resetar</span></button>
       <button class="btn" id="btnImport">⬆<span>Importar</span></button>
       <button class="btn btn-primary" id="btnExport">⬇<span>Exportar</span></button>
@@ -1509,51 +1508,6 @@
   <div id="mbd" style="display:none" class="mbd">
     <div class="modal" id="modal"></div>
   </div>
-
-  <script type="module">
-    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
-
-    const SUPABASE_URL = '__SUPABASE_URL__';
-    const SUPABASE_KEY = '__SUPABASE_KEY__';
-
-    const sb = createClient(SUPABASE_URL, SUPABASE_KEY, {
-      auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
-    });
-
-    // ── 1. Verificar sessão ───────────────────────────────────
-    const { data: { session } } = await sb.auth.getSession();
-    if (!session) {
-      window.location.href = 'login.html';
-    } else {
-      const user = session.user;
-
-      // ── 2. Expõe globalmente ──────────────────────────────
-      window._sb = sb;
-      window._user = user;
-
-      // ── 3. Carrega álbum do banco → localStorage (cache) ─
-      const KEY = 'album_copa2026_v1';
-      try {
-        const { data, error } = await sb
-          .from('album')
-          .select('sticker_id, qty')
-          .eq('user_id', user.id);
-
-        if (!error && data) {
-          const obj = {};
-          data.forEach(r => { obj[r.sticker_id] = r.qty; });
-          localStorage.setItem(KEY, JSON.stringify(obj));
-        }
-      } catch (e) {
-        console.warn('Erro ao carregar álbum do Supabase:', e.message);
-      }
-
-      // ── 4. Listener de mudança de sessão ──────────────────
-      sb.auth.onAuthStateChange((event) => {
-        if (event === 'SIGNED_OUT') window.location.href = 'login.html';
-      });
-    }
-  </script>
 
   <script>
     const FLAGS = {
@@ -1785,24 +1739,8 @@
     const S = {
       _d() { try { return JSON.parse(localStorage.getItem(KEY) || '{}') } catch { return {} } },
       get(id) { return this._d()[id] || 0 },
-      set(id, q) {
-        const qty = Math.max(0, q);
-        const d = this._d();
-        d[id] = qty;
-        localStorage.setItem(KEY, JSON.stringify(d));
-        // Sync to Supabase in background
-        if (window._sb && window._user) {
-          window._sb.rpc('upsert_sticker', { p_sticker_id: id, p_qty: qty })
-            .then(({ error }) => { if (error) console.warn('sync error:', error.message); });
-        }
-      },
-      reset() {
-        localStorage.removeItem(KEY);
-        if (window._sb && window._user) {
-          window._sb.from('album').delete().eq('user_id', window._user.id)
-            .then(({ error }) => { if (error) console.warn('reset error:', error.message); });
-        }
-      },
+      set(id, q) { const d = this._d(); d[id] = Math.max(0, q); localStorage.setItem(KEY, JSON.stringify(d)) },
+      reset() { localStorage.removeItem(KEY) },
       export() { return JSON.stringify(this._d(), null, 2) },
       import(d) { localStorage.setItem(KEY, JSON.stringify(d)) },
     };
@@ -2140,12 +2078,6 @@
     window.addEventListener('keydown', e => {
       if (e.key === 'Escape') closeMenu();
     });
-
-    function doLogout() {
-      if (!confirm('Sair da conta?')) return;
-      if (window._sb) window._sb.auth.signOut();
-      else window.location.href = 'login.html';
-    }
 
     function renderAll() {
       renderTop();
