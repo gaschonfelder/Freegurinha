@@ -464,7 +464,7 @@
       <div class="left-orb lo-1"></div>
       <div class="left-orb lo-2"></div>
       <div class="left-inner">
-        <a class="brand-logo" href="/pages/landing.html">Free<span>gurinha</span></a>
+        <a class="brand-logo" href="index.html">Free<span>gurinha</span></a>
         <h2 class="left-h">Seu álbum,<br /><span class="g">completo.</span></h2>
         <p class="left-sub">Gerencie suas figurinhas da Copa do Mundo 2026. Saiba o que falta, o que está repetido e onde cada craque está.</p>
         <div class="left-stats">
@@ -574,31 +574,17 @@
   </div>
 
   <script type="module">
-    // Em produção: importar do serviço real
-    // import { auth } from './services/auth.js';
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
-    // ── Stub local para funcionar sem backend ─────────────────────
-    const AUTH_KEY = 'freegurinha_user_v1';
+    const sb = createClient('__SUPABASE_URL__', '__SUPABASE_KEY__', {
+      auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
+    });
 
-    const authStub = {
-      async loginWithEmail(email, password) {
-        if (!email || !password) throw new Error('Preencha e-mail e senha.');
-        if (password.length < 6) throw new Error('Senha muito curta.');
-        const user = { id: `email_${Date.now()}`, name: email.split('@')[0], email, phone: null, provider: 'email', createdAt: new Date().toISOString() };
-        localStorage.setItem(AUTH_KEY, JSON.stringify(user));
-        return user;
-      },
-      async registerWithEmail(email, password, name, phone) {
-        if (!name) throw new Error('Digite seu nome.');
-        if (!email) throw new Error('Digite um e-mail.');
-        if (password.length < 6) throw new Error('Senha precisa ter pelo menos 6 caracteres.');
-        const user = { id: `email_${Date.now()}`, name, email, phone: phone || null, provider: 'email', createdAt: new Date().toISOString() };
-        localStorage.setItem(AUTH_KEY, JSON.stringify(user));
-        return user;
-      },
-      loginWithGoogle() { alert('Login com Google será implementado em breve!'); },
-    };
+    // Se ja logado vai direto pro app
+    const { data: { session } } = await sb.auth.getSession();
+    if (session) { window.location.href = '/pages/app.html'; }
 
+    // ── UI helpers ─────────────────────────────────────────────
     window.switchTab = function (tab) {
       const isLogin = tab === 'login';
       document.getElementById('tabLogin').classList.toggle('active', isLogin);
@@ -608,54 +594,92 @@
       hideMessages();
     };
 
+    function showError(msg) {
+      const el = document.getElementById('errorMsg');
+      if (!el) return;
+      el.textContent = msg;
+      el.classList.add('show');
+      const ok = document.getElementById('successBar');
+      if (ok) ok.classList.remove('show');
+    }
+    function showSuccess(msg) {
+      const el = document.getElementById('successBar');
+      if (!el) return;
+      el.textContent = msg;
+      el.classList.add('show');
+      const err = document.getElementById('errorMsg');
+      if (err) err.classList.remove('show');
+    }
+    function hideMessages() {
+      const err = document.getElementById('errorMsg');
+      const ok = document.getElementById('successBar');
+      if (err) err.classList.remove('show');
+      if (ok) ok.classList.remove('show');
+    }
+    function setLoading(btnId, loading) {
+      const btn = document.getElementById(btnId);
+      if (!btn) return;
+      btn.disabled = loading;
+      btn.classList.toggle('loading', loading);
+    }
+
+    // ── Login email ─────────────────────────────────────────────
     window.doLogin = async function () {
       const email = document.getElementById('loginEmail').value.trim();
       const pass = document.getElementById('loginPass').value;
-      const btn = document.getElementById('btnLogin');
       hideMessages();
-      btn.classList.add('loading');
+      if (!email || !pass) { showError('Preencha e-mail e senha.'); return; }
+      setLoading('btnLogin', true);
       try {
-        await authStub.loginWithEmail(email, pass);
-        showSuccess('Login realizado! Redirecionando...');
-        setTimeout(() => window.location.href = 'app.html', 1000);
+        const { error } = await sb.auth.signInWithPassword({ email, password: pass });
+        if (error) throw error;
+        window.location.href = '/pages/app.html';
       } catch (e) {
-        showError(e.message);
-      } finally { btn.classList.remove('loading'); }
+        const msg = e.message === 'Invalid login credentials'
+          ? 'E-mail ou senha incorretos.' : e.message;
+        showError(msg);
+        setLoading('btnLogin', false);
+      }
     };
 
+    // ── Registro ────────────────────────────────────────────────
     window.doRegister = async function () {
       const name = document.getElementById('regName').value.trim();
       const email = document.getElementById('regEmail').value.trim();
       const pass = document.getElementById('regPass').value;
-      const ddi = document.getElementById('regDDI').value.trim();
-      const tel = document.getElementById('regPhone').value.trim();
-      const phone = tel ? `${ddi}${tel.replace(/\D/g, '')}` : null;
-      const btn = document.getElementById('btnRegister');
       hideMessages();
-      btn.classList.add('loading');
+      if (!name) { showError('Digite seu nome.'); return; }
+      if (!email) { showError('Digite um e-mail.'); return; }
+      if (pass.length < 6) { showError('Senha precisa ter pelo menos 6 caracteres.'); return; }
+      setLoading('btnRegister', true);
       try {
-        await authStub.registerWithEmail(email, pass, name, phone);
-        showSuccess('Conta criada! Redirecionando...');
-        setTimeout(() => window.location.href = 'app.html', 1000);
+        const { data, error } = await sb.auth.signUp({
+          email, password: pass,
+          options: { data: { full_name: name } }
+        });
+        if (error) throw error;
+        if (data.user && !data.session) {
+          showSuccess('Conta criada! Verifique seu e-mail para confirmar.');
+          setLoading('btnRegister', false);
+        } else {
+          window.location.href = '/pages/app.html';
+        }
       } catch (e) {
         showError(e.message);
-      } finally { btn.classList.remove('loading'); }
+        setLoading('btnRegister', false);
+      }
     };
 
-    window.doGoogle = () => authStub.loginWithGoogle();
-
-    function showError(msg) {
-      const el = document.getElementById('errorMsg');
-      el.textContent = msg; el.classList.add('show');
-    }
-    function showSuccess(msg) {
-      const el = document.getElementById('successBar');
-      el.textContent = msg; el.classList.add('show');
-    }
-    function hideMessages() {
-      document.getElementById('errorMsg').classList.remove('show');
-      document.getElementById('successBar').classList.remove('show');
-    }
+    // ── Google OAuth ────────────────────────────────────────────
+    window.doGoogle = async function () {
+      const { error } = await sb.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: window.location.origin + '/pages/app.html'
+        }
+      });
+      if (error) showError(error.message);
+    };
 
     // Enter key
     document.addEventListener('keydown', e => {
@@ -663,11 +687,6 @@
       const isLogin = document.getElementById('stepLogin').classList.contains('active');
       if (isLogin) window.doLogin(); else window.doRegister();
     });
-
-    // Se já logado, redireciona direto
-    if (localStorage.getItem(AUTH_KEY)) {
-      window.location.href = 'app.html';
-    }
   </script>
 </body>
 
