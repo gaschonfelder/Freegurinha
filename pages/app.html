@@ -1492,9 +1492,7 @@
     <div class="top-actions">
       <button class="btn btn-ghost" id="btnLogout" onclick="doLogout()" title="Sair">&#8594; Sair</button>
       <button class="btn btn-ghost" id="btnReset" title="Resetar">↺<span>Resetar</span></button>
-      <button class="btn" id="btnImport">⬆<span>Importar</span></button>
       <button class="btn btn-primary" id="btnExport">⬇<span>Exportar</span></button>
-      <input type="file" id="fileInput" accept=".json" style="display:none" />
     </div>
   </header>
   <div class="prog">
@@ -1973,13 +1971,17 @@
       if (active === 'all') pool = allS.map(s => { const g = groups.find(gr => gr.stickers.includes(s)); return { ...s, _gf: g?.flag, _gl: g?.label } });
       else if (active.startsWith('type-')) {
         const type = active.replace('type-', '');
-        pool = groups.flatMap(g => g.stickers.filter(s => s.type === type || (type === 'special' && s.type === 'double')).map(s => ({ ...s, _gf: g.flag, _gl: g.label })));
+        pool = groups.flatMap(g => g.stickers.filter(s => {
+          if (type === 'special') return s.type === 'special' || s.type === 'double';
+          if (type === 'player') return s.type === 'player' || s.type === 'photo' || s.type === 'craque';
+          return s.type === type;
+        }).map(s => ({ ...s, _gf: g.flag, _gl: g.label })));
       } else {
         const g = groups.find(gr => gr.id === active);
         pool = g ? g.stickers.map(s => ({ ...s, _gf: g.flag, _gl: g.label })) : [];
       }
       if (fs !== 'all') pool = pool.filter(s => { const q = S.get(s.id); if (fs === 'owned') return q >= 1; if (fs === 'missing') return q === 0; if (fs === 'duplicate') return q > 1 });
-      if (ft !== 'all') pool = pool.filter(s => ft === 'craque' ? s.type === 'craque' : ft === 'player' ? (s.type === 'player' || s.type === 'photo') : s.type === ft);
+      if (ft !== 'all') pool = pool.filter(s => ft === 'player' ? (s.type === 'player' || s.type === 'photo' || s.type === 'craque') : ft === 'craque' ? s.type === 'craque' : s.type === ft);
       if (search.trim()) { const q = search.toLowerCase(); pool = pool.filter(s => s.name.toLowerCase().includes(q) || String(s.number).includes(q) || (s.description || '').toLowerCase().includes(q) || s.id.toLowerCase().includes(q)); }
       return pool;
     }
@@ -1995,7 +1997,8 @@
     <div class="chip c-dup${fs === 'duplicate' ? ' on' : ''}" data-fs="duplicate">⊕ Repetidas</div>
     <div class="fsep"></div>
     <div class="chip${ft === 'all' ? ' on' : ''}" data-ft="all">Todos</div>
-    <div class="chip${ft === 'player' ? ' on' : ''}" data-ft="player">⚽</div>
+    <div class="chip${ft === 'player' ? ' on' : ''}" data-ft="player">⚽ Jogadores</div>
+    <div class="chip${ft === 'craque' ? ' on' : ''}" data-ft="craque">⭐ Craques</div>
     <div class="chip${ft === 'stadium' ? ' on' : ''}" data-ft="stadium">🏟️</div>
     <div class="chip${ft === 'shield' ? ' on' : ''}" data-ft="shield">🛡️</div>
     <div class="chip${ft === 'special' ? ' on' : ''}" data-ft="special">✨</div>
@@ -2122,8 +2125,6 @@
 
     document.getElementById('btnReset').onclick = () => { if (confirm('Resetar todo o álbum?')) { S.reset(); renderAll(); toast('Álbum resetado', 'rem') } };
     document.getElementById('btnExport').onclick = () => openExportModal();
-    document.getElementById('btnImport').onclick = () => document.getElementById('fileInput').click();
-    document.getElementById('fileInput').onchange = e => { const f = e.target.files[0]; if (!f) return; const r = new FileReader(); r.onload = ev => { try { S.import(JSON.parse(ev.target.result)); renderAll(); toast('Importado!') } catch { toast('Erro', 'rem') } }; r.readAsText(f); e.target.value = '' };
     document.getElementById('btnMenu').onclick = toggleMenu;
     document.getElementById('mobileBackdrop').onclick = closeMenu;
     window.addEventListener('resize', () => {
