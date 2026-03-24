@@ -1475,6 +1475,58 @@
       text-align: center;
       color: #fff;
       box-shadow: 0 1px 4px rgba(0, 0, 0, .18);*/
+
+    /* ── LOADING SCREEN ──────────────────────────────────────── */
+    #appLoading {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: var(--ink, #0a0c10);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1.25rem;
+      transition: opacity .3s ease;
+    }
+
+    #appLoading.fade-out {
+      opacity: 0;
+      pointer-events: none
+    }
+
+    .loading-logo {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -.02em;
+    }
+
+    .loading-logo span {
+      color: #00c16a
+    }
+
+    .loading-spinner {
+      width: 32px;
+      height: 32px;
+      border: 3px solid rgba(255, 255, 255, .1);
+      border-top-color: #00c16a;
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+    }
+
+    .loading-msg {
+      font-size: .8rem;
+      color: rgba(255, 255, 255, .35);
+      font-family: 'Inter', sans-serif;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg)
+      }
+    }
   </style>
 </head>
 
@@ -1495,6 +1547,13 @@
       <button class="btn btn-primary" id="btnExport">⬇<span>Exportar</span></button>
     </div>
   </header>
+
+  <div id="appLoading">
+    <div class="loading-logo">Free<span>gurinha</span></div>
+    <div class="loading-spinner"></div>
+    <div class="loading-msg">Carregando seu álbum...</div>
+  </div>
+
   <div class="prog">
     <div class="prog-fill" id="progFill" style="width:0%"></div>
   </div>
@@ -1508,43 +1567,67 @@
     <div class="modal" id="modal"></div>
   </div>
 
-  <script type="module">
-    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script>
+    (function () {
+      var SUPABASE_URL = '__SUPABASE_URL__';
+      var SUPABASE_KEY = '__SUPABASE_KEY__';
+      var KEY = 'album_copa2026_v1';
 
-    const sb = createClient('__SUPABASE_URL__', '__SUPABASE_KEY__', {
-      auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
-    });
+      var sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
+        auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
+      });
 
-    // 1. Verificar sessao
-    const { data: { session } } = await sb.auth.getSession();
-    if (!session) {
-      window.location.href = '/pages/login.html';
-    } else {
-      const user = session.user;
-      window._sb = sb;
-      window._user = user;
-
-      // 2. Carregar album do banco -> localStorage (cache)
-      const KEY = 'album_copa2026_v1';
-      try {
-        const { data, error } = await sb
-          .from('album')
-          .select('sticker_id, qty')
-          .eq('user_id', user.id);
-        if (!error && data) {
-          const obj = {};
-          data.forEach(r => { obj[r.sticker_id] = r.qty; });
-          localStorage.setItem(KEY, JSON.stringify(obj));
-        }
-      } catch (e) {
-        console.warn('Erro ao carregar album:', e.message);
+      function hideLoading() {
+        var el = document.getElementById('appLoading');
+        if (!el) return;
+        el.classList.add('fade-out');
+        setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); }, 350);
       }
 
-      // 3. Listener de sessao
-      sb.auth.onAuthStateChange((event) => {
-        if (event === 'SIGNED_OUT') window.location.href = '/pages/login.html';
+      function redirectLogin() {
+        window.location.href = '/pages/login.html';
+      }
+
+      // Verifica sessao e carrega album
+      sb.auth.getSession().then(function (result) {
+        var session = result.data && result.data.session;
+        if (!session) {
+          redirectLogin();
+          return;
+        }
+
+        var user = session.user;
+        window._sb = sb;
+        window._user = user;
+
+        // Carrega album do banco -> localStorage (cache)
+        sb.from('album')
+          .select('sticker_id, qty')
+          .eq('user_id', user.id)
+          .then(function (res) {
+            if (!res.error && res.data) {
+              var obj = {};
+              res.data.forEach(function (r) { obj[r.sticker_id] = r.qty; });
+              localStorage.setItem(KEY, JSON.stringify(obj));
+            }
+            // Mostra o app independente de erro na query
+            hideLoading();
+          })
+          .catch(function (e) {
+            console.warn('Erro ao carregar album:', e.message);
+            hideLoading();
+          });
+
+        // Listener de sessao
+        sb.auth.onAuthStateChange(function (event) {
+          if (event === 'SIGNED_OUT') redirectLogin();
+        });
+
+      }).catch(function () {
+        redirectLogin();
       });
-    }
+    })();
   </script>
 
   <script>
@@ -1658,6 +1741,15 @@
       'EGY': { name: 'Mohamed Salah', img: '../public/assets/jogadores/egito-jogador.png' },
     };
 
+    // Posição do Craque no álbum por seleção (1-18)
+    // Atualizar quando o catálogo Panini oficial sair (abril/2026)
+    const CRAQUE_POSITIONS = {
+      BRA: 1, ARG: 1, FRA: 1, ESP: 1, POR: 1, NED: 1,
+      ENG: 1, BEL: 1, URU: 1, CRO: 1, MAR: 1, NOR: 1,
+      GER: 1, CAN: 1, USA: 1, KOR: 1, ECU: 1, COL: 1,
+      PAR: 1, ALG: 1, EGY: 1,
+    };
+
     const TH_FALLBACK = { p: '#9ca3af', c: '#6b7280', bar: '#9ca3af' };
     const TH_SPECIAL = { p: '#c8920a', c: '#8a6200', bar: '#c8920a' };
 
@@ -1752,9 +1844,15 @@
           const items = [];
           if (ALBUM_CONFIG.hasShield) items.push(mk(`${team.code}-SCU`, 'shield', 'Escudo', { ...base, shiny: true }));
           if (ALBUM_CONFIG.hasTeamPhoto) items.push(mk(`${team.code}-COL`, 'photo', 'Foto Oficial', { ...base, shiny: false }));
-          if (CRAQUES[team.code]) { const cr = CRAQUES[team.code]; items.push(mk(`${team.code}-CRQ`, 'craque', cr.name, { ...base, shiny: true, playerImg: cr.img })); }
+          // Gera jogadores 1-N, inserindo o Craque na posição correta
+          const crqPos = CRAQUES[team.code] ? (CRAQUE_POSITIONS[team.code] || 1) : null;
           for (let p = 1; p <= ALBUM_CONFIG.playersPerTeam; p++) {
-            items.push(mk(`${team.code}-${String(p).padStart(2, '0')}`, 'player', `Jogador ${p}`, { ...base, shiny: false }));
+            if (crqPos && p === crqPos) {
+              const cr = CRAQUES[team.code];
+              items.push(mk(`${team.code}-CRQ`, 'craque', cr.name, { ...base, shiny: true, playerImg: cr.img, position: p }));
+            } else {
+              items.push(mk(`${team.code}-${String(p).padStart(2, '0')}`, 'player', 'NOME', { ...base, shiny: false, position: p }));
+            }
           }
           groups.push({ id: team.code, label: team.name, flag: team.flag, groupId: grp.id, groupLabel: grp.label, type: 'player', placeholder: team.placeholder || false, placeholderNote: team.note || '', stickers: items });
         }
@@ -1934,7 +2032,7 @@
       const types = [{ id: 'type-player', i: '⚽', l: 'Jogadores' }, { id: 'type-craque', i: '⭐', l: 'Craques' }, { id: 'type-stadium', i: '🏟️', l: 'Estádios' }, { id: 'type-shield', i: '🛡️', l: 'Escudos' }, { id: 'type-special', i: '✨', l: 'Especiais' }];
       html += sbS('Por Tipo', types.map(({ id, i, l }) => {
         const type = id.replace('type-', '');
-        const ss = allS.filter(s => s.type === type || (type === 'special' && s.type === 'double'));
+        const ss = allS.filter(s => type === 'player' ? (s.type === 'player' || s.type === 'photo' || s.type === 'craque') : s.type === type || (type === 'special' && s.type === 'double'));
         const pct = ss.length ? Math.round(ss.filter(s => S.get(s.id) >= 1).length / ss.length * 100) : 0;
         return sbI(id, i, l, pct, active === id, false);
       }));
@@ -1971,17 +2069,13 @@
       if (active === 'all') pool = allS.map(s => { const g = groups.find(gr => gr.stickers.includes(s)); return { ...s, _gf: g?.flag, _gl: g?.label } });
       else if (active.startsWith('type-')) {
         const type = active.replace('type-', '');
-        pool = groups.flatMap(g => g.stickers.filter(s => {
-          if (type === 'special') return s.type === 'special' || s.type === 'double';
-          if (type === 'player') return s.type === 'player' || s.type === 'photo' || s.type === 'craque';
-          return s.type === type;
-        }).map(s => ({ ...s, _gf: g.flag, _gl: g.label })));
+        pool = groups.flatMap(g => g.stickers.filter(s => type === 'player' ? (s.type === 'player' || s.type === 'photo' || s.type === 'craque') : s.type === type || (type === 'special' && s.type === 'double')).map(s => ({ ...s, _gf: g.flag, _gl: g.label })));
       } else {
         const g = groups.find(gr => gr.id === active);
         pool = g ? g.stickers.map(s => ({ ...s, _gf: g.flag, _gl: g.label })) : [];
       }
       if (fs !== 'all') pool = pool.filter(s => { const q = S.get(s.id); if (fs === 'owned') return q >= 1; if (fs === 'missing') return q === 0; if (fs === 'duplicate') return q > 1 });
-      if (ft !== 'all') pool = pool.filter(s => ft === 'player' ? (s.type === 'player' || s.type === 'photo' || s.type === 'craque') : ft === 'craque' ? s.type === 'craque' : s.type === ft);
+      if (ft !== 'all') pool = pool.filter(s => ft === 'player' ? (s.type === 'player' || s.type === 'photo' || s.type === 'craque') : s.type === ft);
       if (search.trim()) { const q = search.toLowerCase(); pool = pool.filter(s => s.name.toLowerCase().includes(q) || String(s.number).includes(q) || (s.description || '').toLowerCase().includes(q) || s.id.toLowerCase().includes(q)); }
       return pool;
     }
@@ -1997,8 +2091,7 @@
     <div class="chip c-dup${fs === 'duplicate' ? ' on' : ''}" data-fs="duplicate">⊕ Repetidas</div>
     <div class="fsep"></div>
     <div class="chip${ft === 'all' ? ' on' : ''}" data-ft="all">Todos</div>
-    <div class="chip${ft === 'player' ? ' on' : ''}" data-ft="player">⚽ Jogadores</div>
-    <div class="chip${ft === 'craque' ? ' on' : ''}" data-ft="craque">⭐ Craques</div>
+    <div class="chip${ft === 'player' ? ' on' : ''}" data-ft="player">⚽</div>
     <div class="chip${ft === 'stadium' ? ' on' : ''}" data-ft="stadium">🏟️</div>
     <div class="chip${ft === 'shield' ? ' on' : ''}" data-ft="shield">🛡️</div>
     <div class="chip${ft === 'special' ? ' on' : ''}" data-ft="special">✨</div>

@@ -454,11 +454,60 @@
         display: none
       }
     }
+
+    /* ── LOADING SCREEN ──────────────────────────────── */
+    #loginLoading {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: #0a0c10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1.25rem;
+      transition: opacity .3s ease;
+    }
+
+    #loginLoading.fade-out {
+      opacity: 0;
+      pointer-events: none
+    }
+
+    .ll-logo {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #fff
+    }
+
+    .ll-logo span {
+      color: #00c16a
+    }
+
+    .ll-spinner {
+      width: 28px;
+      height: 28px;
+      border: 3px solid rgba(255, 255, 255, .1);
+      border-top-color: #00c16a;
+      border-radius: 50%;
+      animation: spin .7s linear infinite
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg)
+      }
+    }
   </style>
 </head>
 
 <body>
-  <div class="page">
+  <div id="loginLoading">
+    <div class="ll-logo">Free<span>gurinha</span></div>
+    <div class="ll-spinner"></div>
+  </div>
+  <div class="page" style="opacity:0;transition:opacity .3s">
     <!-- LEFT — BRAND -->
     <div class="left">
       <div class="left-orb lo-1"></div>
@@ -573,120 +622,132 @@
     </div>
   </div>
 
-  <script type="module">
-    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script>
+    (function () {
+      var SUPABASE_URL = '__SUPABASE_URL__';
+      var SUPABASE_KEY = '__SUPABASE_KEY__';
 
-    const sb = createClient('__SUPABASE_URL__', '__SUPABASE_KEY__', {
-      auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
-    });
-
-    // Se ja logado vai direto pro app
-    const { data: { session } } = await sb.auth.getSession();
-    if (session) { window.location.href = '/pages/app.html'; }
-
-    // ── UI helpers ─────────────────────────────────────────────
-    window.switchTab = function (tab) {
-      const isLogin = tab === 'login';
-      document.getElementById('tabLogin').classList.toggle('active', isLogin);
-      document.getElementById('tabRegister').classList.toggle('active', !isLogin);
-      document.getElementById('stepLogin').classList.toggle('active', isLogin);
-      document.getElementById('stepRegister').classList.toggle('active', !isLogin);
-      hideMessages();
-    };
-
-    function showError(msg) {
-      const el = document.getElementById('errorMsg');
-      if (!el) return;
-      el.textContent = msg;
-      el.classList.add('show');
-      const ok = document.getElementById('successBar');
-      if (ok) ok.classList.remove('show');
-    }
-    function showSuccess(msg) {
-      const el = document.getElementById('successBar');
-      if (!el) return;
-      el.textContent = msg;
-      el.classList.add('show');
-      const err = document.getElementById('errorMsg');
-      if (err) err.classList.remove('show');
-    }
-    function hideMessages() {
-      const err = document.getElementById('errorMsg');
-      const ok = document.getElementById('successBar');
-      if (err) err.classList.remove('show');
-      if (ok) ok.classList.remove('show');
-    }
-    function setLoading(btnId, loading) {
-      const btn = document.getElementById(btnId);
-      if (!btn) return;
-      btn.disabled = loading;
-      btn.classList.toggle('loading', loading);
-    }
-
-    // ── Login email ─────────────────────────────────────────────
-    window.doLogin = async function () {
-      const email = document.getElementById('loginEmail').value.trim();
-      const pass = document.getElementById('loginPass').value;
-      hideMessages();
-      if (!email || !pass) { showError('Preencha e-mail e senha.'); return; }
-      setLoading('btnLogin', true);
-      try {
-        const { error } = await sb.auth.signInWithPassword({ email, password: pass });
-        if (error) throw error;
-        window.location.href = '/pages/app.html';
-      } catch (e) {
-        const msg = e.message === 'Invalid login credentials'
-          ? 'E-mail ou senha incorretos.' : e.message;
-        showError(msg);
-        setLoading('btnLogin', false);
-      }
-    };
-
-    // ── Registro ────────────────────────────────────────────────
-    window.doRegister = async function () {
-      const name = document.getElementById('regName').value.trim();
-      const email = document.getElementById('regEmail').value.trim();
-      const pass = document.getElementById('regPass').value;
-      hideMessages();
-      if (!name) { showError('Digite seu nome.'); return; }
-      if (!email) { showError('Digite um e-mail.'); return; }
-      if (pass.length < 6) { showError('Senha precisa ter pelo menos 6 caracteres.'); return; }
-      setLoading('btnRegister', true);
-      try {
-        const { data, error } = await sb.auth.signUp({
-          email, password: pass,
-          options: { data: { full_name: name } }
-        });
-        if (error) throw error;
-        if (data.user && !data.session) {
-          showSuccess('Conta criada! Verifique seu e-mail para confirmar.');
-          setLoading('btnRegister', false);
-        } else {
-          window.location.href = '/pages/app.html';
-        }
-      } catch (e) {
-        showError(e.message);
-        setLoading('btnRegister', false);
-      }
-    };
-
-    // ── Google OAuth ────────────────────────────────────────────
-    window.doGoogle = async function () {
-      const { error } = await sb.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: window.location.origin + '/pages/app.html'
-        }
+      var sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
+        auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
       });
-      if (error) showError(error.message);
-    };
 
-    // Enter key
-    document.addEventListener('keydown', e => {
-      if (e.key !== 'Enter') return;
-      const isLogin = document.getElementById('stepLogin').classList.contains('active');
-      if (isLogin) window.doLogin(); else window.doRegister();
-    });
+      function showPage() {
+        var loading = document.getElementById('loginLoading');
+        var page = document.querySelector('.page');
+        if (loading) {
+          loading.classList.add('fade-out');
+          setTimeout(function () { if (loading.parentNode) loading.parentNode.removeChild(loading); }, 300);
+        }
+        if (page) page.style.opacity = '1';
+      }
+
+      function showError(msg) {
+        var el = document.getElementById('errorMsg');
+        if (el) { el.textContent = msg; el.classList.add('show'); }
+        var ok = document.getElementById('successBar');
+        if (ok) ok.classList.remove('show');
+      }
+      function showSuccess(msg) {
+        var el = document.getElementById('successBar');
+        if (el) { el.textContent = msg; el.classList.add('show'); }
+        var err = document.getElementById('errorMsg');
+        if (err) err.classList.remove('show');
+      }
+      function hideMessages() {
+        var err = document.getElementById('errorMsg');
+        var ok = document.getElementById('successBar');
+        if (err) err.classList.remove('show');
+        if (ok) ok.classList.remove('show');
+      }
+      function setLoading(btnId, loading) {
+        var btn = document.getElementById(btnId);
+        if (!btn) return;
+        btn.disabled = loading;
+        btn.classList.toggle('loading', loading);
+      }
+
+      // Verifica se ja logado
+      sb.auth.getSession().then(function (result) {
+        var session = result.data && result.data.session;
+        if (session) {
+          window.location.href = '/pages/app.html';
+        } else {
+          showPage();
+        }
+      }).catch(function () {
+        showPage();
+      });
+
+      // ── Expoe funcoes globais ─────────────────────────────
+      window.switchTab = function (tab) {
+        var isLogin = tab === 'login';
+        document.getElementById('tabLogin').classList.toggle('active', isLogin);
+        document.getElementById('tabRegister').classList.toggle('active', !isLogin);
+        document.getElementById('stepLogin').classList.toggle('active', isLogin);
+        document.getElementById('stepRegister').classList.toggle('active', !isLogin);
+        hideMessages();
+      };
+
+      window.doLogin = function () {
+        var email = document.getElementById('loginEmail').value.trim();
+        var pass = document.getElementById('loginPass').value;
+        hideMessages();
+        if (!email || !pass) { showError('Preencha e-mail e senha.'); return; }
+        setLoading('btnLogin', true);
+        sb.auth.signInWithPassword({ email: email, password: pass })
+          .then(function (res) {
+            if (res.error) throw res.error;
+            window.location.href = '/pages/app.html';
+          })
+          .catch(function (e) {
+            var msg = e.message === 'Invalid login credentials'
+              ? 'E-mail ou senha incorretos.' : e.message;
+            showError(msg);
+            setLoading('btnLogin', false);
+          });
+      };
+
+      window.doRegister = function () {
+        var name = document.getElementById('regName').value.trim();
+        var email = document.getElementById('regEmail').value.trim();
+        var pass = document.getElementById('regPass').value;
+        hideMessages();
+        if (!name) { showError('Digite seu nome.'); return; }
+        if (!email) { showError('Digite um e-mail.'); return; }
+        if (pass.length < 6) { showError('Senha precisa ter pelo menos 6 caracteres.'); return; }
+        setLoading('btnRegister', true);
+        sb.auth.signUp({ email: email, password: pass, options: { data: { full_name: name } } })
+          .then(function (res) {
+            if (res.error) throw res.error;
+            if (res.data.user && !res.data.session) {
+              showSuccess('Conta criada! Verifique seu e-mail para confirmar.');
+              setLoading('btnRegister', false);
+            } else {
+              window.location.href = '/pages/app.html';
+            }
+          })
+          .catch(function (e) {
+            showError(e.message);
+            setLoading('btnRegister', false);
+          });
+      };
+
+      window.doGoogle = function () {
+        sb.auth.signInWithOAuth({
+          provider: 'google',
+          options: { redirectTo: window.location.origin + '/pages/app.html' }
+        }).then(function (res) {
+          if (res.error) showError(res.error.message);
+        });
+      };
+
+      document.addEventListener('keydown', function (e) {
+        if (e.key !== 'Enter') return;
+        var isLogin = document.getElementById('stepLogin').classList.contains('active');
+        if (isLogin) window.doLogin(); else window.doRegister();
+      });
+    })();
   </script>
 </body>
 
