@@ -1,0 +1,10 @@
+{
+  "name": "freegurinha",
+  "version": "1.0.0",
+  "description": "Coleção digital de figurinhas Copa do Mundo 2026",
+  "type": "module",
+  "scripts": {
+    "build": "node build.js",
+    "dev": "node build.js && npx serve dist"
+  }
+}

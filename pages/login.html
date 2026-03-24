@@ -464,7 +464,7 @@
       <div class="left-orb lo-1"></div>
       <div class="left-orb lo-2"></div>
       <div class="left-inner">
-        <a class="brand-logo" href="landing.html">Free<span>gurinha</span></a>
+        <a class="brand-logo" href="index.html">Free<span>gurinha</span></a>
         <h2 class="left-h">Seu álbum,<br /><span class="g">completo.</span></h2>
         <p class="left-sub">Gerencie suas figurinhas da Copa do Mundo 2026. Saiba o que falta, o que está repetido e onde cada craque está.</p>
         <div class="left-stats">
@@ -577,8 +577,8 @@
     import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
     // ── Supabase ──────────────────────────────────────────────
-    const SUPABASE_URL = 'https://suufdiusvkniznebowqg.supabase.co';
-    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN1dWZkaXVzdmtuaXpuZWJvd3FnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQzNzU5ODcsImV4cCI6MjA4OTk1MTk4N30.qZqyqg4GJ3WERCfi1k3b8CsIEfu8Jx8nHom4tgzqSXk';
+    const SUPABASE_URL = '__SUPABASE_URL__';
+    const SUPABASE_KEY = '__SUPABASE_KEY__';
     const sb = createClient(SUPABASE_URL, SUPABASE_KEY, {
       auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
     });

@@ -1,0 +1,25 @@
+# ── Vercel ────────────────────────────────────────
+.vercel
+
+# ── Dependências ──────────────────────────────────
+node_modules/
+
+# ── Ambiente / Segredos ───────────────────────────
+.env
+.env.local
+.env.production
+.env.development
+
+# ── Sistema ───────────────────────────────────────
+.DS_Store
+Thumbs.db
+
+# ── Editores ──────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Variáveis de ambiente locais — NUNCA subir
+.env.local
+.env*.local

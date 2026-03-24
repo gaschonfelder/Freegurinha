@@ -1,31 +1,19 @@
 {
   "version": 2,
   "name": "freegurinha",
-  "builds": [
-    { "src": "pages/**", "use": "@vercel/static" },
-    { "src": "public/**", "use": "@vercel/static" },
-    { "src": "services/**", "use": "@vercel/static" },
-    { "src": "catalog/**", "use": "@vercel/static" }
-  ],
+  "buildCommand": "node build.js",
+  "outputDirectory": "dist",
+  "env": {
+    "SUPABASE_URL": "https://suufdiusvkniznebowqg.supabase.co",
+    "SUPABASE_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN1dWZkaXVzdmtuaXpuZWJvd3FnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQzNzU5ODcsImV4cCI6MjA4OTk1MTk4N30.qZqyqg4GJ3WERCfi1k3b8CsIEfu8Jx8nHom4tgzqSXk"
+  },
   "routes": [
     { "src": "/", "dest": "/pages/landing.html" },
     { "src": "/login", "dest": "/pages/login.html" },
     { "src": "/app", "dest": "/pages/app.html" },
     { "src": "/(.*)", "dest": "/$1" }
   ],
-  "env": {
-    "SUPABASE_URL": "https://suufdiusvkniznebowqg.supabase.co",
-    "SUPABASE_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN1dWZkaXVzdmtuaXpuZWJvd3FnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQzNzU5ODcsImV4cCI6MjA4OTk1MTk4N30.qZqyqg4GJ3WERCfi1k3b8CsIEfu8Jx8nHom4tgzqSXk"
-  },
   "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
-        { "key": "X-Frame-Options", "value": "DENY" },
-        { "key": "X-Content-Type-Options", "value": "nosniff" },
-        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
-      ]
-    },
     {
       "source": "/public/assets/(.*)",
       "headers": [
