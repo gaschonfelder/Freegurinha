@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Freegurinha — Entrar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #0a0c10;
+      --muted: #6b7080;
+      --bg: #f2f4f9;
+      --white: #fff;
+      --green: #00c16a;
+      --green-d: #006837;
+      --line: rgba(0, 0, 0, .08);
+      --serif: 'Syne', sans-serif;
+      --body: 'Inter', sans-serif;
+      --radius: 14px;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    html,
+    body {
+      height: 100%;
+      font-family: var(--body);
+      background: var(--ink);
+      color: #fff
+    }
+
+    /* SPLIT LAYOUT */
+    .page {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 100vh
+    }
+
+    /* LEFT — brand */
+    .left {
+      background: var(--ink);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .left-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(100px);
+      pointer-events: none
+    }
+
+    .lo-1 {
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(0, 193, 106, .2), transparent 70%);
+      top: -100px;
+      left: -100px
+    }
+
+    .lo-2 {
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(240, 180, 41, .1), transparent 70%);
+      bottom: -50px;
+      right: -50px
+    }
+
+    .left-inner {
+      position: relative;
+      z-index: 1
+    }
+
+    .brand-logo {
+      font-family: var(--serif);
+      font-size: 2rem;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -.02em;
+      margin-bottom: 2rem;
+      display: block;
+      text-decoration: none;
+    }
+
+    .brand-logo span {
+      color: var(--green)
+    }
+
+    .left-h {
+      font-family: var(--serif);
+      font-size: clamp(2.2rem, 3vw, 3.2rem);
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -.03em;
+      color: #fff;
+      margin-bottom: 1rem;
+    }
+
+    .left-h .g {
+      background: linear-gradient(135deg, var(--green), #00e87a);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .left-sub {
+      font-size: .95rem;
+      font-weight: 300;
+      color: rgba(255, 255, 255, .45);
+      line-height: 1.7;
+      max-width: 360px;
+      margin-bottom: 3rem
+    }
+
+    .left-stats {
+      display: flex;
+      gap: 2rem
+    }
+
+    .ls-item .lv {
+      font-family: var(--serif);
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1
+    }
+
+    .ls-item .lv sup {
+      font-size: .75rem;
+      color: var(--green)
+    }
+
+    .ls-item .ll {
+      font-size: .65rem;
+      color: rgba(255, 255, 255, .3);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      margin-top: 2px
+    }
+
+    .left-badge {
+      margin-top: 3rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: .72rem;
+      font-weight: 500;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--green);
+      padding: .3rem .85rem;
+      border-radius: 99px;
+      border: 1px solid rgba(0, 193, 106, .25);
+      background: rgba(0, 193, 106, .08);
+    }
+
+    /* RIGHT — form */
+    .right {
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 3rem 2rem;
+    }
+
+    .form-box {
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .form-title {
+      font-family: var(--serif);
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--ink);
+      letter-spacing: -.02em;
+      margin-bottom: .4rem;
+    }
+
+    .form-sub {
+      font-size: .875rem;
+      font-weight: 300;
+      color: var(--muted);
+      margin-bottom: 2rem
+    }
+
+    /* TABS */
+    .tabs {
+      display: flex;
+      gap: 0;
+      margin-bottom: 2rem;
+      background: rgba(0, 0, 0, .05);
+      border-radius: 10px;
+      padding: 3px
+    }
+
+    .tab {
+      flex: 1;
+      font-family: var(--body);
+      font-size: .85rem;
+      font-weight: 500;
+      padding: .55rem;
+      border-radius: 8px;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all .15s;
+    }
+
+    .tab.active {
+      background: var(--white);
+      color: var(--ink);
+      box-shadow: 0 1px 6px rgba(0, 0, 0, .1)
+    }
+
+    /* FIELDS */
+    .field {
+      margin-bottom: 1rem
+    }
+
+    .field label {
+      display: block;
+      font-size: .8rem;
+      font-weight: 500;
+      color: var(--ink);
+      margin-bottom: .45rem
+    }
+
+    .field input {
+      width: 100%;
+      padding: .75rem 1rem;
+      border-radius: 10px;
+      border: 1.5px solid rgba(0, 0, 0, .1);
+      background: var(--white);
+      color: var(--ink);
+      font-family: var(--body);
+      font-size: .9rem;
+      outline: none;
+      transition: border-color .15s;
+    }
+
+    .field input:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(0, 193, 106, .1)
+    }
+
+    .field input::placeholder {
+      color: var(--muted)
+    }
+
+    /* Phone field extra */
+    .phone-wrap {
+      display: flex;
+      gap: .5rem
+    }
+
+    .phone-ddi {
+      width: 80px;
+      padding: .75rem .75rem;
+      border-radius: 10px;
+      border: 1.5px solid rgba(0, 0, 0, .1);
+      background: var(--white);
+      color: var(--ink);
+      font-family: var(--body);
+      font-size: .9rem;
+      outline: none;
+      flex-shrink: 0;
+    }
+
+    .field-hint {
+      font-size: .75rem;
+      color: var(--muted);
+      margin-top: .35rem;
+      line-height: 1.4
+    }
+
+    /* BTN */
+    .btn-submit {
+      width: 100%;
+      padding: .9rem;
+      border-radius: 10px;
+      background: var(--green);
+      color: var(--ink);
+      font-family: var(--body);
+      font-size: .95rem;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: all .15s;
+      margin-top: .5rem;
+    }
+
+    .btn-submit:hover {
+      background: #00d975;
+      transform: translateY(-1px)
+    }
+
+    .btn-submit:active {
+      transform: scale(.98)
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      margin: 1.25rem 0
+    }
+
+    .divider::before,
+    .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(0, 0, 0, .1)
+    }
+
+    .divider span {
+      font-size: .75rem;
+      color: var(--muted)
+    }
+
+    /* Google btn */
+    .btn-google {
+      width: 100%;
+      padding: .85rem;
+      border-radius: 10px;
+      background: var(--white);
+      color: var(--ink);
+      font-family: var(--body);
+      font-size: .9rem;
+      font-weight: 500;
+      border: 1.5px solid rgba(0, 0, 0, .1);
+      cursor: pointer;
+      transition: all .15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .6rem;
+    }
+
+    .btn-google:hover {
+      border-color: rgba(0, 0, 0, .2);
+      background: #fafafa
+    }
+
+    .btn-google svg {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0
+    }
+
+    .form-switch {
+      margin-top: 1.5rem;
+      text-align: center;
+      font-size: .82rem;
+      color: var(--muted);
+    }
+
+    .form-switch a {
+      color: var(--green-d);
+      font-weight: 500;
+      text-decoration: none
+    }
+
+    .form-switch a:hover {
+      text-decoration: underline
+    }
+
+    /* error */
+    .error-msg {
+      background: #fdecea;
+      border: 1px solid rgba(192, 57, 43, .2);
+      border-radius: 8px;
+      padding: .6rem .85rem;
+      font-size: .8rem;
+      color: #c0392b;
+      margin-bottom: .75rem;
+      display: none;
+    }
+
+    .error-msg.show {
+      display: block
+    }
+
+    /* Phone step */
+    .step {
+      display: none
+    }
+
+    .step.active {
+      display: block
+    }
+
+    /* success overlay */
+    .success-bar {
+      background: var(--green);
+      border-radius: 8px;
+      padding: .6rem .85rem;
+      font-size: .8rem;
+      color: var(--ink);
+      font-weight: 500;
+      margin-bottom: .75rem;
+      display: none;
+      text-align: center;
+    }
+
+    .success-bar.show {
+      display: block
+    }
+
+    /* loading spinner */
+    .btn-submit.loading {
+      opacity: .7;
+      pointer-events: none
+    }
+
+    .btn-submit.loading::after {
+      content: ' ⟳';
+      animation: spin .8s linear infinite;
+      display: inline-block;
+    }
+
+    @keyframes spin {
+      from {
+        transform: rotate(0)
+      }
+
+      to {
+        transform: rotate(360deg)
+      }
+    }
+
+    @media(max-width:768px) {
+      .page {
+        grid-template-columns: 1fr
+      }
+
+      .left {
+        display: none
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+    <!-- LEFT — BRAND -->
+    <div class="left">
+      <div class="left-orb lo-1"></div>
+      <div class="left-orb lo-2"></div>
+      <div class="left-inner">
+        <a class="brand-logo" href="landing.html">Free<span>gurinha</span></a>
+        <h2 class="left-h">Seu álbum,<br /><span class="g">completo.</span></h2>
+        <p class="left-sub">Gerencie suas figurinhas da Copa do Mundo 2026. Saiba o que falta, o que está repetido e onde cada craque está.</p>
+        <div class="left-stats">
+          <div class="ls-item">
+            <div class="lv">600<sup>+</sup></div>
+            <div class="ll">Figurinhas</div>
+          </div>
+          <div class="ls-item">
+            <div class="lv">48<sup>+</sup></div>
+            <div class="ll">Seleções</div>
+          </div>
+          <div class="ls-item">
+            <div class="lv">16</div>
+            <div class="ll">Estádios</div>
+          </div>
+        </div>
+        <div class="left-badge">⚽ Copa do Mundo 2026</div>
+      </div>
+    </div>
+
+    <!-- RIGHT — FORM -->
+    <div class="right">
+      <div class="form-box">
+        <h1 class="form-title">Entrar</h1>
+        <p class="form-sub">Acesse seu álbum ou crie uma conta gratuita.</p>
+
+        <div class="tabs">
+          <button class="tab active" id="tabLogin" onclick="switchTab('login')">Entrar</button>
+          <button class="tab" id="tabRegister" onclick="switchTab('register')">Criar conta</button>
+        </div>
+
+        <div class="error-msg" id="errorMsg"></div>
+        <div class="success-bar" id="successBar"></div>
+
+        <!-- LOGIN STEP -->
+        <div class="step active" id="stepLogin">
+          <div class="field">
+            <label for="loginEmail">E-mail</label>
+            <input type="email" id="loginEmail" placeholder="seu@email.com" autocomplete="email" />
+          </div>
+          <div class="field">
+            <label for="loginPass">Senha</label>
+            <input type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password" />
+          </div>
+          <button class="btn-submit" id="btnLogin" onclick="doLogin()">Entrar no álbum →</button>
+
+          <div class="divider"><span>ou</span></div>
+
+          <button class="btn-google" onclick="doGoogle()">
+            <svg viewBox="0 0 24 24">
+              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" />
+              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+            </svg>
+            Continuar com Google
+          </button>
+
+          <div class="form-switch">
+            Não tem conta? <a href="#" onclick="switchTab('register');return false">Criar gratuitamente</a>
+          </div>
+        </div>
+
+        <!-- REGISTER STEP -->
+        <div class="step" id="stepRegister">
+          <div class="field">
+            <label for="regName">Nome</label>
+            <input type="text" id="regName" placeholder="Seu nome" autocomplete="name" />
+          </div>
+          <div class="field">
+            <label for="regEmail">E-mail</label>
+            <input type="email" id="regEmail" placeholder="seu@email.com" autocomplete="email" />
+          </div>
+          <div class="field">
+            <label for="regPass">Senha</label>
+            <input type="password" id="regPass" placeholder="Mínimo 6 caracteres" autocomplete="new-password" />
+            <div class="field-hint">Mínimo 6 caracteres</div>
+          </div>
+          <div class="field">
+            <label for="regPhone">Telefone <span style="font-weight:300;color:var(--muted)">(opcional — para WhatsApp)</span></label>
+            <div class="phone-wrap">
+              <input class="phone-ddi" type="text" value="+55" id="regDDI" />
+              <input type="tel" id="regPhone" placeholder="(11) 99999-9999" style="flex:1" />
+            </div>
+            <div class="field-hint">Usado para vincular sua conta ao bot WhatsApp (em breve)</div>
+          </div>
+          <button class="btn-submit" id="btnRegister" onclick="doRegister()">Criar minha conta →</button>
+
+          <div class="divider"><span>ou</span></div>
+
+          <button class="btn-google" onclick="doGoogle()">
+            <svg viewBox="0 0 24 24">
+              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" />
+              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+            </svg>
+            Continuar com Google
+          </button>
+
+          <div class="form-switch">
+            Já tem conta? <a href="#" onclick="switchTab('login');return false">Entrar</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+    // ── Supabase ──────────────────────────────────────────────
+    const SUPABASE_URL = 'https://suufdiusvkniznebowqg.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InN1dWZkaXVzdmtuaXpuZWJvd3FnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQzNzU5ODcsImV4cCI6MjA4OTk1MTk4N30.qZqyqg4GJ3WERCfi1k3b8CsIEfu8Jx8nHom4tgzqSXk';
+    const sb = createClient(SUPABASE_URL, SUPABASE_KEY, {
+      auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
+    });
+
+    // Se já logado, vai direto pro app
+    const { data: { session } } = await sb.auth.getSession();
+    if (session) { window.location.href = 'app.html'; }
+
+    // ── Helpers UI ────────────────────────────────────────────
+    window.switchTab = function (tab) {
+      const isLogin = tab === 'login';
+      document.getElementById('tabLogin').classList.toggle('active', isLogin);
+      document.getElementById('tabRegister').classList.toggle('active', !isLogin);
+      document.getElementById('stepLogin').classList.toggle('active', isLogin);
+      document.getElementById('stepRegister').classList.toggle('active', !isLogin);
+      hideMessages();
+    };
+
+    function showErr(msg) {
+      const el = document.getElementById('errorMsg');
+      el.textContent = msg; el.classList.add('show');
+      document.getElementById('successBar').classList.remove('show');
+    }
+    function showOk(msg) {
+      const el = document.getElementById('successBar');
+      el.textContent = msg; el.classList.add('show');
+      document.getElementById('errorMsg').classList.remove('show');
+    }
+    function hideMessages() {
+      document.getElementById('errorMsg').classList.remove('show');
+      document.getElementById('successBar').classList.remove('show');
+    }
+    function setLoading(btnId, loading) {
+      const btn = document.getElementById(btnId);
+      btn.classList.toggle('loading', loading);
+      btn.disabled = loading;
+    }
+
+    // ── Login ─────────────────────────────────────────────────
+    window.doLogin = async function () {
+      const email = document.getElementById('loginEmail').value.trim();
+      const pass = document.getElementById('loginPass').value;
+      hideMessages();
+      if (!email || !pass) { showErr('Preencha e-mail e senha.'); return; }
+      setLoading('btnLogin', true);
+      try {
+        const { error } = await sb.auth.signInWithPassword({ email, password: pass });
+        if (error) throw error;
+        window.location.href = 'app.html';
+      } catch (e) {
+        const msg = e.message === 'Invalid login credentials'
+          ? 'E-mail ou senha incorretos.' : e.message;
+        showErr(msg);
+        setLoading('btnLogin', false);
+      }
+    };
+
+    // ── Registro ──────────────────────────────────────────────
+    window.doRegister = async function () {
+      const name = document.getElementById('regName').value.trim();
+      const email = document.getElementById('regEmail').value.trim();
+      const pass = document.getElementById('regPass').value;
+      hideMessages();
+      if (!name) { showErr('Digite seu nome.'); return; }
+      if (!email) { showErr('Digite um e-mail válido.'); return; }
+      if (pass.length < 6) { showErr('Senha precisa ter pelo menos 6 caracteres.'); return; }
+      setLoading('btnRegister', true);
+      try {
+        const { data, error } = await sb.auth.signUp({
+          email, password: pass,
+          options: { data: { full_name: name } }
+        });
+        if (error) throw error;
+        if (data.user && !data.session) {
+          showOk('Conta criada! Verifique seu e-mail para confirmar.');
+          setLoading('btnRegister', false);
+        } else {
+          window.location.href = 'app.html';
+        }
+      } catch (e) {
+        showErr(e.message);
+        setLoading('btnRegister', false);
+      }
+    };
+
+    // ── Google OAuth ──────────────────────────────────────────
+    window.doGoogle = async function () {
+      const { error } = await sb.auth.signInWithOAuth({
+        provider: 'google',
+        options: { redirectTo: window.location.origin + '/pages/app.html' }
+      });
+      if (error) showErr(error.message);
+    };
+
+    // Enter key
+    document.addEventListener('keydown', e => {
+      if (e.key !== 'Enter') return;
+      const isLogin = document.getElementById('stepLogin').classList.contains('active');
+      if (isLogin) window.doLogin(); else window.doRegister();
+    });
+  </script>
+</body>
+
+</html>
