@@ -1589,8 +1589,16 @@
         window.location.href = '/pages/login.html';
       }
 
+      // Timeout de segurança — se Supabase travar no iOS, redireciona em 4s
+      var authTimeout = setTimeout(function () {
+        console.warn('getSession timeout — redirecionando para login');
+        redirectLogin();
+      }, 4000);
+
       // Verifica sessao e carrega album
       sb.auth.getSession().then(function (result) {
+        clearTimeout(authTimeout);
+
         var session = result.data && result.data.session;
         if (!session) {
           redirectLogin();
@@ -1611,7 +1619,6 @@
               res.data.forEach(function (r) { obj[r.sticker_id] = r.qty; });
               localStorage.setItem(KEY, JSON.stringify(obj));
             }
-            // Mostra o app independente de erro na query
             hideLoading();
           })
           .catch(function (e) {
@@ -1625,6 +1632,7 @@
         });
 
       }).catch(function () {
+        clearTimeout(authTimeout);
         redirectLogin();
       });
     })();

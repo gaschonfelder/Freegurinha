@@ -667,8 +667,14 @@
         btn.classList.toggle('loading', loading);
       }
 
+      // Timeout — se iOS travar no getSession, mostra a pagina em 3s
+      var loginTimeout = setTimeout(function () {
+        showPage();
+      }, 3000);
+
       // Verifica se ja logado
       sb.auth.getSession().then(function (result) {
+        clearTimeout(loginTimeout);
         var session = result.data && result.data.session;
         if (session) {
           window.location.href = '/pages/app.html';
@@ -676,6 +682,7 @@
           showPage();
         }
       }).catch(function () {
+        clearTimeout(loginTimeout);
         showPage();
       });
 
