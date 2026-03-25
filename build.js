@@ -18,9 +18,17 @@ if (!SUPABASE_URL || !SUPABASE_KEY) {
   if (fs.existsSync(envPath)) {
     const lines = fs.readFileSync(envPath, 'utf8').split('\n');
     lines.forEach((line) => {
-      const [key, ...rest] = line.split('=');
+      const cleanLine = line.trim().replace(/,$/, '');
+      if (!cleanLine || cleanLine.startsWith('#')) return;
+      const separator = cleanLine.includes('=')
+        ? '='
+        : cleanLine.includes(':')
+          ? ':'
+          : null;
+      if (!separator) return;
+      const [key, ...rest] = cleanLine.split(separator);
       const val = rest
-        .join('=')
+        .join(separator)
         .trim()
         .replace(/^["']|["']$/g, '');
       if (key.trim() === 'SUPABASE_URL') SUPABASE_URL = val;

@@ -6,8 +6,10 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Álbum Copa 2026</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="dns-prefetch" href="https://suufdiusvkniznebowqg.supabase.co" />
+  <link rel="preconnect" href="https://suufdiusvkniznebowqg.supabase.co" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet" />
-  <script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=t5MIACA68R6aY6UdntTeIY95GWwpvJ06oo301SAJgpSJ35WqZyHN6o7AiyypeE2YnNMZQDSEHXzIQhfo0VFT1tLx__JU6qFSUtFN5LAFK4MZI6VNR1adsbJadoJp9gb9ovGnaYJRCj-yT6sdQ3vI89dKcQeqk6YJJIN-UeEdiFQ9ozu4VG8DMIdf0tfIPzlgefmb0yUCVdQ9jZTjKWIUatqfkwYnOKz_RCjoCHBmBssfYOzgIHQnr1eHrsmEynACPC7OTkJB84EQbma37-zFNA" charset="UTF-8"></script>
   <style>
     :root {
       --ink: #0d0f14;
@@ -1586,19 +1588,17 @@
       }
 
       function redirectLogin() {
-        window.location.href = '/pages/login.html';
+        window.location.replace('/pages/login.html');
       }
 
-      // Timeout de segurança — se Supabase travar no iOS, redireciona em 4s
-      var authTimeout = setTimeout(function () {
-        console.warn('getSession timeout — redirecionando para login');
-        redirectLogin();
-      }, 4000);
+      function bootUiWhenReady() {
+        window.__APP_CAN_BOOT__ = true;
+        window.dispatchEvent(new Event('app-auth-ready'));
+        hideLoading();
+      }
 
-      // Verifica sessao e carrega album
+      // Verifica sessao primeiro. A UI pesada do album so e montada depois disso.
       sb.auth.getSession().then(function (result) {
-        clearTimeout(authTimeout);
-
         var session = result.data && result.data.session;
         if (!session) {
           redirectLogin();
@@ -1609,7 +1609,9 @@
         window._sb = sb;
         window._user = user;
 
-        // Carrega album do banco -> localStorage (cache)
+        bootUiWhenReady();
+
+        // Carrega/sincroniza album em segundo plano.
         sb.from('album')
           .select('sticker_id, qty')
           .eq('user_id', user.id)
@@ -1618,12 +1620,11 @@
               var obj = {};
               res.data.forEach(function (r) { obj[r.sticker_id] = r.qty; });
               localStorage.setItem(KEY, JSON.stringify(obj));
+              window.dispatchEvent(new Event('album-data-synced'));
             }
-            hideLoading();
           })
           .catch(function (e) {
-            console.warn('Erro ao carregar album:', e.message);
-            hideLoading();
+            console.warn('Erro ao carregar album:', e && e.message ? e.message : e);
           });
 
         // Listener de sessao
@@ -1631,8 +1632,8 @@
           if (event === 'SIGNED_OUT') redirectLogin();
         });
 
-      }).catch(function () {
-        clearTimeout(authTimeout);
+      }).catch(function (e) {
+        console.warn('Erro ao validar sessao no app:', e && e.message ? e.message : e);
         redirectLogin();
       });
     })();
@@ -2242,13 +2243,27 @@
       else window.location.href = '/pages/login.html';
     }
 
+    let appBooted = false;
     function renderAll() {
       renderTop();
       renderSidebar();
       renderMain();
       syncMenuUI();
     }
-    renderAll();
+
+    function bootApp() {
+      if (appBooted) return;
+      appBooted = true;
+      requestAnimationFrame(renderAll);
+    }
+
+    if (window.__APP_CAN_BOOT__) bootApp();
+    else window.addEventListener('app-auth-ready', bootApp, { once: true });
+
+    window.addEventListener('album-data-synced', function () {
+      if (!appBooted) return;
+      requestAnimationFrame(renderAll);
+    });
   </script>
   <script src="../services/export.js"></script>
 </body>

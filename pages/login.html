@@ -6,6 +6,9 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Freegurinha — Entrar</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="dns-prefetch" href="https://suufdiusvkniznebowqg.supabase.co" />
+  <link rel="preconnect" href="https://suufdiusvkniznebowqg.supabase.co" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
     :root {
@@ -667,23 +670,19 @@
         btn.classList.toggle('loading', loading);
       }
 
-      // Timeout — se iOS travar no getSession, mostra a pagina em 3s
-      var loginTimeout = setTimeout(function () {
-        showPage();
-      }, 3000);
+      // Mostra a tela imediatamente e verifica a sessao em segundo plano.
+      // Assim o mobile nao fica preso no loading inicial.
+      showPage();
 
-      // Verifica se ja logado
+      var redirectedFromSessionCheck = false;
       sb.auth.getSession().then(function (result) {
-        clearTimeout(loginTimeout);
         var session = result.data && result.data.session;
-        if (session) {
-          window.location.href = '/pages/app.html';
-        } else {
-          showPage();
+        if (session && !redirectedFromSessionCheck) {
+          redirectedFromSessionCheck = true;
+          window.location.replace('/pages/app.html');
         }
-      }).catch(function () {
-        clearTimeout(loginTimeout);
-        showPage();
+      }).catch(function (e) {
+        console.warn('Falha ao verificar sessao no login:', e && e.message ? e.message : e);
       });
 
       // ── Expoe funcoes globais ─────────────────────────────
@@ -705,7 +704,7 @@
         sb.auth.signInWithPassword({ email: email, password: pass })
           .then(function (res) {
             if (res.error) throw res.error;
-            window.location.href = '/pages/app.html';
+            window.location.replace('/pages/app.html');
           })
           .catch(function (e) {
             var msg = e.message === 'Invalid login credentials'
@@ -731,7 +730,7 @@
               showSuccess('Conta criada! Verifique seu e-mail para confirmar.');
               setLoading('btnRegister', false);
             } else {
-              window.location.href = '/pages/app.html';
+              window.location.replace('/pages/app.html');
             }
           })
           .catch(function (e) {
