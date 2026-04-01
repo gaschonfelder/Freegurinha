@@ -1775,122 +1775,121 @@
     const TH_SPECIAL = { p: '#c8920a', c: '#8a6200', bar: '#c8920a' };
 
     const GROUPS = [
-      {
-        id: 'A', label: 'Grupo A', teams: [{ code: 'MEX', name: 'México', flag: '🇲🇽' }, { code: 'RSA', name: 'África do Sul', flag: '🇿🇦' }, { code: 'KOR', name: 'Coreia do Sul', flag: '🇰🇷' }, { code: 'REP_A4', name: 'República Tcheca', flag: '🇨🇿' },
-        { id: 'B', label: 'Grupo B', teams: [{ code: 'CAN', name: 'Canadá', flag: '🇨🇦' }, { code: 'QAT', name: 'Catar', flag: '🇶🇦' }, { code: 'SUI', name: 'Suíça', flag: '🇨🇭' }, { code: 'REP_B1', name: 'Rep. Europa 1', flag: '🏳️', placeholder: true, note: 'Itália, Irlanda do Norte, País de Gales ou Bósnia' }] },
-        { id: 'C', label: 'Grupo C', teams: [{ code: 'BRA', name: 'Brasil', flag: '🇧🇷' }, { code: 'MAR', name: 'Marrocos', flag: '🇲🇦' }, { code: 'HAI', name: 'Haiti', flag: '🇭🇹' }, { code: 'SCO', name: 'Escócia', flag: '🇬🇧' }] },
-        { id: 'D', label: 'Grupo D', teams: [{ code: 'USA', name: 'Estados Unidos', flag: '🇺🇸' }, { code: 'PAR', name: 'Paraguai', flag: '🇵🇾' }, { code: 'AUS', name: 'Austrália', flag: '🇦🇺' }, { code: 'REP_D3', name: 'Rep. Europa 3', flag: '🏳️', placeholder: true, note: 'Turquia, Romênia, Eslováquia ou Kosovo' }] },
-        { id: 'E', label: 'Grupo E', teams: [{ code: 'GER', name: 'Alemanha', flag: '🇩🇪' }, { code: 'CUW', name: 'Curaçao', flag: '🇨🇼' }, { code: 'CIV', name: 'Costa do Marfim', flag: '🇨🇮' }, { code: 'ECU', name: 'Equador', flag: '🇪🇨' }] },
-        { id: 'F', label: 'Grupo F', teams: [{ code: 'NED', name: 'Holanda', flag: '🇳🇱' }, { code: 'JAP', name: 'Japão', flag: '🇯🇵' }, { code: 'TUN', name: 'Tunísia', flag: '🇹🇳' }, { code: 'REP_F2', name: 'Rep. Europa 2', flag: '🏳️', placeholder: true, note: 'Ucrânia, Suécia, Polônia ou Albânia' }] },
-        { id: 'G', label: 'Grupo G', teams: [{ code: 'BEL', name: 'Bélgica', flag: '🇧🇪' }, { code: 'EGY', name: 'Egito', flag: '🇪🇬' }, { code: 'IRN', name: 'Irã', flag: '🇮🇷' }, { code: 'NZL', name: 'Nova Zelândia', flag: '🇳🇿' }] },
-        { id: 'H', label: 'Grupo H', teams: [{ code: 'ESP', name: 'Espanha', flag: '🇪🇸' }, { code: 'CPV', name: 'Cabo Verde', flag: '🇨🇻' }, { code: 'KSA', name: 'Arábia Saudita', flag: '🇸🇦' }, { code: 'URU', name: 'Uruguai', flag: '🇺🇾' }] },
-        { id: 'I', label: 'Grupo I', teams: [{ code: 'FRA', name: 'França', flag: '🇫🇷' }, { code: 'SEN', name: 'Senegal', flag: '🇸🇳' }, { code: 'NOR', name: 'Noruega', flag: '🇳🇴' }, { code: 'REP_IB', name: 'Rep. Mundial B', flag: '🏳️', placeholder: true, note: 'Bolívia, Suriname ou Iraque' }] },
-        { id: 'J', label: 'Grupo J', teams: [{ code: 'ARG', name: 'Argentina', flag: '🇦🇷' }, { code: 'ALG', name: 'Argélia', flag: '🇩🇿' }, { code: 'AUT', name: 'Áustria', flag: '🇦🇹' }, { code: 'JOR', name: 'Jordânia', flag: '🇯🇴' }] },
-        { id: 'K', label: 'Grupo K', teams: [{ code: 'POR', name: 'Portugal', flag: '🇵🇹' }, { code: 'UZB', name: 'Uzbequistão', flag: '🇺🇿' }, { code: 'COL', name: 'Colômbia', flag: '🇨🇴' }, { code: 'REP_KA', name: 'Rep. Mundial A', flag: '🏳️', placeholder: true, note: 'RD Congo, Jamaica ou Nova Caledônia' }] },
-        { id: 'L', label: 'Grupo L', teams: [{ code: 'ENG', name: 'Inglaterra', flag: '🇬🇧' }, { code: 'CRO', name: 'Croácia', flag: '🇭🇷' }, { code: 'GHA', name: 'Gana', flag: '🇬🇭' }, { code: 'PAN', name: 'Panamá', flag: '🇵🇦' }] },
-        ];
+      { id: 'A', label: 'Grupo A', teams: [{ code: 'MEX', name: 'México', flag: '🇲🇽' }, { code: 'RSA', name: 'África do Sul', flag: '🇿🇦' }, { code: 'KOR', name: 'Coreia do Sul', flag: '🇰🇷' }, { code: 'REP_A4', name: 'República Tcheca', flag: '🇨🇿' }] },
+      { id: 'B', label: 'Grupo B', teams: [{ code: 'CAN', name: 'Canadá', flag: '🇨🇦' }, { code: 'QAT', name: 'Catar', flag: '🇶🇦' }, { code: 'SUI', name: 'Suíça', flag: '🇨🇭' }, { code: 'REP_B1', name: 'Rep. Europa 1', flag: '🏳️', placeholder: true, note: 'Itália, Irlanda do Norte, País de Gales ou Bósnia' }] },
+      { id: 'C', label: 'Grupo C', teams: [{ code: 'BRA', name: 'Brasil', flag: '🇧🇷' }, { code: 'MAR', name: 'Marrocos', flag: '🇲🇦' }, { code: 'HAI', name: 'Haiti', flag: '🇭🇹' }, { code: 'SCO', name: 'Escócia', flag: '🇬🇧' }] },
+      { id: 'D', label: 'Grupo D', teams: [{ code: 'USA', name: 'Estados Unidos', flag: '🇺🇸' }, { code: 'PAR', name: 'Paraguai', flag: '🇵🇾' }, { code: 'AUS', name: 'Austrália', flag: '🇦🇺' }, { code: 'REP_D3', name: 'Rep. Europa 3', flag: '🏳️', placeholder: true, note: 'Turquia, Romênia, Eslováquia ou Kosovo' }] },
+      { id: 'E', label: 'Grupo E', teams: [{ code: 'GER', name: 'Alemanha', flag: '🇩🇪' }, { code: 'CUW', name: 'Curaçao', flag: '🇨🇼' }, { code: 'CIV', name: 'Costa do Marfim', flag: '🇨🇮' }, { code: 'ECU', name: 'Equador', flag: '🇪🇨' }] },
+      { id: 'F', label: 'Grupo F', teams: [{ code: 'NED', name: 'Holanda', flag: '🇳🇱' }, { code: 'JAP', name: 'Japão', flag: '🇯🇵' }, { code: 'TUN', name: 'Tunísia', flag: '🇹🇳' }, { code: 'REP_F2', name: 'Rep. Europa 2', flag: '🏳️', placeholder: true, note: 'Ucrânia, Suécia, Polônia ou Albânia' }] },
+      { id: 'G', label: 'Grupo G', teams: [{ code: 'BEL', name: 'Bélgica', flag: '🇧🇪' }, { code: 'EGY', name: 'Egito', flag: '🇪🇬' }, { code: 'IRN', name: 'Irã', flag: '🇮🇷' }, { code: 'NZL', name: 'Nova Zelândia', flag: '🇳🇿' }] },
+      { id: 'H', label: 'Grupo H', teams: [{ code: 'ESP', name: 'Espanha', flag: '🇪🇸' }, { code: 'CPV', name: 'Cabo Verde', flag: '🇨🇻' }, { code: 'KSA', name: 'Arábia Saudita', flag: '🇸🇦' }, { code: 'URU', name: 'Uruguai', flag: '🇺🇾' }] },
+      { id: 'I', label: 'Grupo I', teams: [{ code: 'FRA', name: 'França', flag: '🇫🇷' }, { code: 'SEN', name: 'Senegal', flag: '🇸🇳' }, { code: 'NOR', name: 'Noruega', flag: '🇳🇴' }, { code: 'REP_IB', name: 'Rep. Mundial B', flag: '🏳️', placeholder: true, note: 'Bolívia, Suriname ou Iraque' }] },
+      { id: 'J', label: 'Grupo J', teams: [{ code: 'ARG', name: 'Argentina', flag: '🇦🇷' }, { code: 'ALG', name: 'Argélia', flag: '🇩🇿' }, { code: 'AUT', name: 'Áustria', flag: '🇦🇹' }, { code: 'JOR', name: 'Jordânia', flag: '🇯🇴' }] },
+      { id: 'K', label: 'Grupo K', teams: [{ code: 'POR', name: 'Portugal', flag: '🇵🇹' }, { code: 'UZB', name: 'Uzbequistão', flag: '🇺🇿' }, { code: 'COL', name: 'Colômbia', flag: '🇨🇴' }, { code: 'REP_KA', name: 'Rep. Mundial A', flag: '🏳️', placeholder: true, note: 'RD Congo, Jamaica ou Nova Caledônia' }] },
+      { id: 'L', label: 'Grupo L', teams: [{ code: 'ENG', name: 'Inglaterra', flag: '🇬🇧' }, { code: 'CRO', name: 'Croácia', flag: '🇭🇷' }, { code: 'GHA', name: 'Gana', flag: '🇬🇭' }, { code: 'PAN', name: 'Panamá', flag: '🇵🇦' }] },
+    ];
 
-        const STADIUMS = [
-          { code: 'MET', name: 'MetLife Stadium', city: 'Nova York/NJ', country: 'USA', flag: '🇺🇸', host: 'Final' },
-          { code: 'DAL', name: 'AT&T Stadium', city: 'Dallas', country: 'USA', flag: '🇺🇸', host: '' },
-          { code: 'ATL', name: 'Mercedes-Benz Stadium', city: 'Atlanta', country: 'USA', flag: '🇺🇸', host: 'Semifinal' },
-          { code: 'LAX', name: 'SoFi Stadium', city: 'Los Angeles', country: 'USA', flag: '🇺🇸', host: '' },
-          { code: 'MIA', name: 'Hard Rock Stadium', city: 'Miami', country: 'USA', flag: '🇺🇸', host: '3º Lugar' },
-          { code: 'KCA', name: 'Arrowhead Stadium', city: 'Kansas City', country: 'USA', flag: '🇺🇸', host: '' },
-          { code: 'HOU', name: 'NRG Stadium', city: 'Houston', country: 'USA', flag: '🇺🇸', host: '' },
-          { code: 'SEA', name: 'Lumen Field', city: 'Seattle', country: 'USA', flag: '🇺🇸', host: '' },
-          { code: 'PHI', name: 'Lincoln Financial Field', city: 'Filadélfia', country: 'USA', flag: '🇺🇸', host: '' },
-          { code: 'SFO', name: "Levi's Stadium", city: 'San Francisco', country: 'USA', flag: '🇺🇸', host: '' },
-          { code: 'BOS', name: 'Gillette Stadium', city: 'Boston', country: 'USA', flag: '🇺🇸', host: '' },
-          { code: 'VAN', name: 'BC Place', city: 'Vancouver', country: 'CAN', flag: '🇨🇦', host: '' },
-          { code: 'TOR', name: 'BMO Field', city: 'Toronto', country: 'CAN', flag: '🇨🇦', host: '' },
-          { code: 'AZT', name: 'Estádio Azteca', city: 'Cd. do México', country: 'MEX', flag: '🇲🇽', host: 'Abertura' },
-          { code: 'GDL', name: 'Estádio Akron', city: 'Guadalajara', country: 'MEX', flag: '🇲🇽', host: '' },
-          { code: 'MTY', name: 'Estádio BBVA', city: 'Monterrey', country: 'MEX', flag: '🇲🇽', host: '' },
-        ];
+    const STADIUMS = [
+      { code: 'MET', name: 'MetLife Stadium', city: 'Nova York/NJ', country: 'USA', flag: '🇺🇸', host: 'Final' },
+      { code: 'DAL', name: 'AT&T Stadium', city: 'Dallas', country: 'USA', flag: '🇺🇸', host: '' },
+      { code: 'ATL', name: 'Mercedes-Benz Stadium', city: 'Atlanta', country: 'USA', flag: '🇺🇸', host: 'Semifinal' },
+      { code: 'LAX', name: 'SoFi Stadium', city: 'Los Angeles', country: 'USA', flag: '🇺🇸', host: '' },
+      { code: 'MIA', name: 'Hard Rock Stadium', city: 'Miami', country: 'USA', flag: '🇺🇸', host: '3º Lugar' },
+      { code: 'KCA', name: 'Arrowhead Stadium', city: 'Kansas City', country: 'USA', flag: '🇺🇸', host: '' },
+      { code: 'HOU', name: 'NRG Stadium', city: 'Houston', country: 'USA', flag: '🇺🇸', host: '' },
+      { code: 'SEA', name: 'Lumen Field', city: 'Seattle', country: 'USA', flag: '🇺🇸', host: '' },
+      { code: 'PHI', name: 'Lincoln Financial Field', city: 'Filadélfia', country: 'USA', flag: '🇺🇸', host: '' },
+      { code: 'SFO', name: "Levi's Stadium", city: 'San Francisco', country: 'USA', flag: '🇺🇸', host: '' },
+      { code: 'BOS', name: 'Gillette Stadium', city: 'Boston', country: 'USA', flag: '🇺🇸', host: '' },
+      { code: 'VAN', name: 'BC Place', city: 'Vancouver', country: 'CAN', flag: '🇨🇦', host: '' },
+      { code: 'TOR', name: 'BMO Field', city: 'Toronto', country: 'CAN', flag: '🇨🇦', host: '' },
+      { code: 'AZT', name: 'Estádio Azteca', city: 'Cd. do México', country: 'MEX', flag: '🇲🇽', host: 'Abertura' },
+      { code: 'GDL', name: 'Estádio Akron', city: 'Guadalajara', country: 'MEX', flag: '🇲🇽', host: '' },
+      { code: 'MTY', name: 'Estádio BBVA', city: 'Monterrey', country: 'MEX', flag: '🇲🇽', host: '' },
+    ];
 
-        const INTRO_STICKERS = [
-          { id: 'INT-01', name: 'Capa do Álbum', shiny: true, iconKey: 'copa' },
-          { id: 'INT-02', name: 'Logo FIFA 2026', shiny: true, iconKey: 'copa' },
-          { id: 'INT-03', name: 'Mascote Oficial', shiny: true, iconKey: 'copa' },
-          { id: 'INT-04', name: 'Troféu da Copa', shiny: false, iconKey: 'copa' },
-          { id: 'INT-05', name: 'Bola Oficial', shiny: true, iconKey: 'bola' },
-          { id: 'INT-06', name: 'Países Anfitriões', shiny: false, iconKey: 'copa' },
-        ];
+    const INTRO_STICKERS = [
+      { id: 'INT-01', name: 'Capa do Álbum', shiny: true, iconKey: 'copa' },
+      { id: 'INT-02', name: 'Logo FIFA 2026', shiny: true, iconKey: 'copa' },
+      { id: 'INT-03', name: 'Mascote Oficial', shiny: true, iconKey: 'copa' },
+      { id: 'INT-04', name: 'Troféu da Copa', shiny: false, iconKey: 'copa' },
+      { id: 'INT-05', name: 'Bola Oficial', shiny: true, iconKey: 'bola' },
+      { id: 'INT-06', name: 'Países Anfitriões', shiny: false, iconKey: 'copa' },
+    ];
 
-        const SPECIAL_STICKERS = [
-          { id: 'SPC-01', name: 'Craque da Copa', stype: 'special', shiny: true },
-          { id: 'SPC-02', name: 'Artilheiro', stype: 'special', shiny: true },
-          { id: 'SPC-03', name: 'Melhor Goleiro', stype: 'special', shiny: true },
-          { id: 'SPC-04', name: 'Seleção do Torneio', stype: 'special', shiny: true },
-          { id: 'SPC-05', name: 'Lenda da Copa', stype: 'special', shiny: true },
-          { id: 'SPC-06', name: 'Ídolo da Copa', stype: 'special', shiny: true },
-          { id: 'SPC-07', name: 'Momento Mágico 1', stype: 'special', shiny: true },
-          { id: 'SPC-08', name: 'Momento Mágico 2', stype: 'special', shiny: true },
-          { id: 'SPC-09', name: 'Momento Mágico 3', stype: 'special', shiny: true },
-          { id: 'SPC-10', name: 'Momento Mágico 4', stype: 'special', shiny: true },
-          { id: 'SPC-11', name: 'Momento Mágico 5', stype: 'special', shiny: true },
-          { id: 'SPC-12', name: 'Momento Mágico 6', stype: 'special', shiny: true },
-          // Exemplo figurinha dupla — descomentar quando catálogo confirmar:
-          // {id:'DBL-01',name:'Dupla dos Sonhos',stype:'double',shiny:true,country:'BRA',doublePlayers:['Vinícius Jr.','Rodrygo']},
-        ];
+    const SPECIAL_STICKERS = [
+      { id: 'SPC-01', name: 'Craque da Copa', stype: 'special', shiny: true },
+      { id: 'SPC-02', name: 'Artilheiro', stype: 'special', shiny: true },
+      { id: 'SPC-03', name: 'Melhor Goleiro', stype: 'special', shiny: true },
+      { id: 'SPC-04', name: 'Seleção do Torneio', stype: 'special', shiny: true },
+      { id: 'SPC-05', name: 'Lenda da Copa', stype: 'special', shiny: true },
+      { id: 'SPC-06', name: 'Ídolo da Copa', stype: 'special', shiny: true },
+      { id: 'SPC-07', name: 'Momento Mágico 1', stype: 'special', shiny: true },
+      { id: 'SPC-08', name: 'Momento Mágico 2', stype: 'special', shiny: true },
+      { id: 'SPC-09', name: 'Momento Mágico 3', stype: 'special', shiny: true },
+      { id: 'SPC-10', name: 'Momento Mágico 4', stype: 'special', shiny: true },
+      { id: 'SPC-11', name: 'Momento Mágico 5', stype: 'special', shiny: true },
+      { id: 'SPC-12', name: 'Momento Mágico 6', stype: 'special', shiny: true },
+      // Exemplo figurinha dupla — descomentar quando catálogo confirmar:
+      // {id:'DBL-01',name:'Dupla dos Sonhos',stype:'double',shiny:true,country:'BRA',doublePlayers:['Vinícius Jr.','Rodrygo']},
+    ];
 
-        const TYPE_LBL = { player: 'Jogador', photo: 'Foto', shield: 'Escudo', craque: 'Craque', stadium: 'Estádio', special: 'Especial', double: 'Dupla', intro: 'Intro' };
-        const TYPE_ICN = { player: '⚽', photo: '📸', shield: '🛡️', stadium: '🏟️', special: '✨', double: '⭐', intro: '🏆' };
-        const BAR_TYPE = { stadium: '#1d6fa4', special: '#c8920a', double: '#7c3aed', intro: '#c8920a', craque: null };
+    const TYPE_LBL = { player: 'Jogador', photo: 'Foto', shield: 'Escudo', craque: 'Craque', stadium: 'Estádio', special: 'Especial', double: 'Dupla', intro: 'Intro' };
+    const TYPE_ICN = { player: '⚽', photo: '📸', shield: '🛡️', stadium: '🏟️', special: '✨', double: '⭐', intro: '🏆' };
+    const BAR_TYPE = { stadium: '#1d6fa4', special: '#c8920a', double: '#7c3aed', intro: '#c8920a', craque: null };
 
-        /* BUILD CATALOG */
-        function buildCatalog() {
-        const groups = [], byId = {}; let n = 1;
-        const mk = (id, type, name, opts = {}) => { const s = { id, number: n++, type, name, ...opts }; byId[id] = s; return s };
+    /* BUILD CATALOG */
+    function buildCatalog() {
+      const groups = [], byId = {}; let n = 1;
+      const mk = (id, type, name, opts = {}) => { const s = { id, number: n++, type, name, ...opts }; byId[id] = s; return s };
 
-        // Intro
-        groups.push({
-          id: 'intro', label: 'Introdução', flag: '🏆', type: 'intro', stickers:
-            INTRO_STICKERS.map(c => mk(c.id, 'intro', c.name, { shiny: c.shiny, country: 'INTRO', flag: '🏆', iconKey: c.iconKey }))
-        });
+      // Intro
+      groups.push({
+        id: 'intro', label: 'Introdução', flag: '🏆', type: 'intro', stickers:
+          INTRO_STICKERS.map(c => mk(c.id, 'intro', c.name, { shiny: c.shiny, country: 'INTRO', flag: '🏆', iconKey: c.iconKey }))
+      });
 
-        // Estádios
-        groups.push({
-          id: 'stadiums', label: 'Estádios', flag: '🏟️', type: 'stadium', stickers:
-            STADIUMS.map(s => mk(`EST-${s.code}`, 'stadium', s.name, {
-              description: s.host ? `${s.city} · ${s.host}` : s.city,
-              country: s.country, shiny: false, flag: s.flag, iconKey: 'estadio'
-            }))
-        });
+      // Estádios
+      groups.push({
+        id: 'stadiums', label: 'Estádios', flag: '🏟️', type: 'stadium', stickers:
+          STADIUMS.map(s => mk(`EST-${s.code}`, 'stadium', s.name, {
+            description: s.host ? `${s.city} · ${s.host}` : s.city,
+            country: s.country, shiny: false, flag: s.flag, iconKey: 'estadio'
+          }))
+      });
 
-        // Seleções
-        for(const grp of GROUPS) {
-          for (const team of grp.teams) {
-            const base = { country: team.code, flag: team.flag, groupId: grp.id, groupLabel: grp.label, placeholder: team.placeholder || false, placeholderNote: team.note || '' };
-            const items = [];
-            if (ALBUM_CONFIG.hasShield) items.push(mk(`${team.code}-SCU`, 'shield', 'Escudo', { ...base, shiny: true }));
-            if (ALBUM_CONFIG.hasTeamPhoto) items.push(mk(`${team.code}-COL`, 'photo', 'Foto Oficial', { ...base, shiny: false }));
-            // Gera jogadores 1-N, inserindo o Craque na posição correta
-            const crqPos = CRAQUES[team.code] ? (CRAQUE_POSITIONS[team.code] || 1) : null;
-            for (let p = 1; p <= ALBUM_CONFIG.playersPerTeam; p++) {
-              if (crqPos && p === crqPos) {
-                const cr = CRAQUES[team.code];
-                items.push(mk(`${team.code}-CRQ`, 'craque', cr.name, { ...base, shiny: true, playerImg: cr.img, position: p }));
-              } else {
-                items.push(mk(`${team.code}-${String(p).padStart(2, '0')}`, 'player', 'NOME', { ...base, shiny: false, position: p }));
-              }
+      // Seleções
+      for (const grp of GROUPS) {
+        for (const team of grp.teams) {
+          const base = { country: team.code, flag: team.flag, groupId: grp.id, groupLabel: grp.label, placeholder: team.placeholder || false, placeholderNote: team.note || '' };
+          const items = [];
+          if (ALBUM_CONFIG.hasShield) items.push(mk(`${team.code}-SCU`, 'shield', 'Escudo', { ...base, shiny: true }));
+          if (ALBUM_CONFIG.hasTeamPhoto) items.push(mk(`${team.code}-COL`, 'photo', 'Foto Oficial', { ...base, shiny: false }));
+          // Gera jogadores 1-N, inserindo o Craque na posição correta
+          const crqPos = CRAQUES[team.code] ? (CRAQUE_POSITIONS[team.code] || 1) : null;
+          for (let p = 1; p <= ALBUM_CONFIG.playersPerTeam; p++) {
+            if (crqPos && p === crqPos) {
+              const cr = CRAQUES[team.code];
+              items.push(mk(`${team.code}-CRQ`, 'craque', cr.name, { ...base, shiny: true, playerImg: cr.img, position: p }));
+            } else {
+              items.push(mk(`${team.code}-${String(p).padStart(2, '0')}`, 'player', 'NOME', { ...base, shiny: false, position: p }));
             }
-            groups.push({ id: team.code, label: team.name, flag: team.flag, groupId: grp.id, groupLabel: grp.label, type: 'player', placeholder: team.placeholder || false, placeholderNote: team.note || '', stickers: items });
           }
+          groups.push({ id: team.code, label: team.name, flag: team.flag, groupId: grp.id, groupLabel: grp.label, type: 'player', placeholder: team.placeholder || false, placeholderNote: team.note || '', stickers: items });
         }
+      }
 
       // Especiais
       groups.push({
-          id: 'special', label: 'Especiais', flag: '✨', type: 'special', stickers:
-            SPECIAL_STICKERS.map(c => mk(c.id, c.stype || 'special', c.name, {
-              shiny: c.shiny, country: c.country || 'SPECIAL', flag: '✨', iconKey: 'especial',
-              doublePlayers: c.doublePlayers || null
-            }))
-        });
+        id: 'special', label: 'Especiais', flag: '✨', type: 'special', stickers:
+          SPECIAL_STICKERS.map(c => mk(c.id, c.stype || 'special', c.name, {
+            shiny: c.shiny, country: c.country || 'SPECIAL', flag: '✨', iconKey: 'especial',
+            doublePlayers: c.doublePlayers || null
+          }))
+      });
 
-        return { groups, byId, total: n - 1 };
-      }
+      return { groups, byId, total: n - 1 };
+    }
 
     /* STORAGE */
     const KEY = 'album_copa2026_v1';
