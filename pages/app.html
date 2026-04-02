@@ -1757,6 +1757,15 @@
       'PAR': { name: 'Gustavo Goméz', img: '../public/assets/jogadores/paraguai-jogador.png' },
       'ALG': { name: 'Riyad Mahrez', img: '../public/assets/jogadores/argelia-jogador.png' },
       'EGY': { name: 'Mohamed Salah', img: '../public/assets/jogadores/egito-jogador.png' },
+      'SCO': { name: 'Andrew Robertson', img: '../public/assets/jogadores/escocia-jogador.png' },
+      'JPN': { name: 'Takefusa Kubo', img: '../public/assets/jogadores/japao-jogador.png' },
+      'IRN': { name: 'Mehdi Taremi', img: '../public/assets/jogadores/ira-jogador.png' },
+      'NGA': { name: 'Victor Osimhen', img: '../public/assets/jogadores/nigeria-jogador.png' },
+      'SEN': { name: 'Sadio Mané', img: '../public/assets/jogadores/senegal-jogador.png' },
+      'SUI': { name: 'Granit Xhaka', img: '../public/assets/jogadores/suica-jogador.png' },
+      'TUR': { name: 'Arda Güler', img: '../public/assets/jogadores/turquia-jogador.png' },
+      'SWE': { name: 'Viktor Gyökeres', img: '../public/assets/jogadores/suecia-jogador.png' },
+      'CZE': { name: 'Patrik Schick', img: '../public/assets/jogadores/tcheca-jogador.png' }
     };
 
     // Posição do Craque no álbum por seleção (1-18)
@@ -1766,6 +1775,8 @@
       ENG: 1, BEL: 9, URU: 1, CRO: 2, MAR: 1, NOR: 1,
       GER: 1, CAN: 1, USA: 1, KOR: 1, ECU: 1, COL: 1,
       PAR: 1, ALG: 1, EGY: 1,
+      SCO: 1, JPN: 1, IRN: 1, NGA: 1, SEN: 1,
+      SUI: 1, TUR: 1, SWE: 1, CZE: 1,
     };
 
     const TH_FALLBACK = { p: '#9ca3af', c: '#6b7280', bar: '#9ca3af' };
@@ -1780,7 +1791,7 @@
       { id: 'F', label: 'Grupo F', teams: [{ code: 'NED', name: 'Holanda', flag: '🇳🇱' }, { code: 'JAP', name: 'Japão', flag: '🇯🇵' }, { code: 'TUN', name: 'Tunísia', flag: '🇹🇳' }, { code: 'SWE', name: 'Suécia', flag: '🇸🇪' }] },
       { id: 'G', label: 'Grupo G', teams: [{ code: 'BEL', name: 'Bélgica', flag: '🇧🇪' }, { code: 'EGY', name: 'Egito', flag: '🇪🇬' }, { code: 'IRN', name: 'Irã', flag: '🇮🇷' }, { code: 'NZL', name: 'Nova Zelândia', flag: '🇳🇿' }] },
       { id: 'H', label: 'Grupo H', teams: [{ code: 'ESP', name: 'Espanha', flag: '🇪🇸' }, { code: 'CPV', name: 'Cabo Verde', flag: '🇨🇻' }, { code: 'KSA', name: 'Arábia Saudita', flag: '🇸🇦' }, { code: 'URU', name: 'Uruguai', flag: '🇺🇾' }] },
-      { id: 'I', label: 'Grupo I', teams: [{ code: 'FRA', name: 'França', flag: '🇫🇷' }, { code: 'SEN', name: 'Senegal', flag: '🇸🇳' }, { code: 'NOR', name: 'Noruega', flag: '🇳🇴' }, { code: 'IRQ', name: 'Iraque', flag: '🇮🇶', placeholder: true, note: 'Bolívia, Suriname ou Iraque' }] },
+      { id: 'I', label: 'Grupo I', teams: [{ code: 'FRA', name: 'França', flag: '🇫🇷' }, { code: 'SEN', name: 'Senegal', flag: '🇸🇳' }, { code: 'NOR', name: 'Noruega', flag: '🇳🇴' }, { code: 'IRQ', name: 'Iraque', flag: '🇮🇶' }] },
       { id: 'J', label: 'Grupo J', teams: [{ code: 'ARG', name: 'Argentina', flag: '🇦🇷' }, { code: 'ALG', name: 'Argélia', flag: '🇩🇿' }, { code: 'AUT', name: 'Áustria', flag: '🇦🇹' }, { code: 'JOR', name: 'Jordânia', flag: '🇯🇴' }] },
       { id: 'K', label: 'Grupo K', teams: [{ code: 'POR', name: 'Portugal', flag: '🇵🇹' }, { code: 'UZB', name: 'Uzbequistão', flag: '🇺🇿' }, { code: 'COL', name: 'Colômbia', flag: '🇨🇴' }, { code: 'COD', name: 'RD Congo', flag: '🇨🇩' }] },
       { id: 'L', label: 'Grupo L', teams: [{ code: 'ENG', name: 'Inglaterra', flag: '🇬🇧' }, { code: 'CRO', name: 'Croácia', flag: '🇭🇷' }, { code: 'GHA', name: 'Gana', flag: '🇬🇭' }, { code: 'PAN', name: 'Panamá', flag: '🇵🇦' }] },
