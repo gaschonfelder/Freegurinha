@@ -1760,6 +1760,7 @@
       'SCO': { name: 'Andrew Robertson', img: '../public/assets/jogadores/escocia-jogador.png' },
       'JAP': { name: 'Takefusa Kubo', img: '../public/assets/jogadores/japao-jogador.png' },
       'IRN': { name: 'Mehdi Taremi', img: '../public/assets/jogadores/ira-jogador.png' },
+      'NGA': { name: 'Victor Osimhen', img: '../public/assets/jogadores/nigeria-jogador.png' },
       'SEN': { name: 'Sadio Mané', img: '../public/assets/jogadores/senegal-jogador.png' },
       'SUI': { name: 'Granit Xhaka', img: '../public/assets/jogadores/suica-jogador.png' },
       'TUR': { name: 'Arda Güler', img: '../public/assets/jogadores/turquia-jogador.png' },
@@ -1770,12 +1771,37 @@
     // Posição do Craque no álbum por seleção (1-18)
     // Atualizar quando o catálogo Panini oficial sair (abril/2026)
     const CRAQUE_POSITIONS = {
-      BRA: 1, ARG: 1, FRA: 1, ESP: 1, POR: 1, NED: 1,
+      BRA: 14, ARG: 1, FRA: 1, ESP: 1, POR: 1, NED: 1, // BRA confirmado: Vinícius Jr. posição 14
       ENG: 1, BEL: 9, URU: 1, CRO: 2, MAR: 1, NOR: 1,
       GER: 1, CAN: 1, USA: 1, KOR: 1, ECU: 1, COL: 1,
       PAR: 1, ALG: 1, EGY: 1,
       SCO: 1, JPN: 1, IRN: 1, NGA: 1, SEN: 1,
       SUI: 1, TUR: 1, SWE: 1, CZE: 1,
+    };
+
+    // Nomes reais por seleção e posição — preencher conforme catálogo oficial
+    // Formato: { 'COD': { posicao: 'Nome', ... } }
+    const PLAYER_NAMES = {
+      'BRA': {
+        2: 'Alisson Becker',
+        3: 'Bento',
+        4: 'Marquinhos',
+        5: 'Éder Militão',
+        6: 'Gabriel Magalhães',
+        7: 'Danilo',
+        8: 'Wesley',
+        9: 'Lucas Paquetá',
+        10: 'Casemiro',
+        11: 'Bruno Guimarães',
+        12: 'Luiz Henrique',
+        13: 'Time',
+        15: 'Rodrygo',
+        16: 'João Pedro',
+        17: 'Matheus Cunha',
+        18: 'Gabriel Martinelli',
+        19: 'Raphinha',
+        20: 'Estevão',
+      },
     };
 
     const TH_FALLBACK = { p: '#9ca3af', c: '#6b7280', bar: '#9ca3af' };
@@ -1879,7 +1905,8 @@
               const cr = CRAQUES[team.code];
               items.push(mk(`${team.code}-CRQ`, 'craque', cr.name, { ...base, shiny: true, playerImg: cr.img, position: p }));
             } else {
-              items.push(mk(`${team.code}-${String(p).padStart(2, '0')}`, 'player', 'NOME', { ...base, shiny: false, position: p }));
+              const pName = (PLAYER_NAMES[team.code] && PLAYER_NAMES[team.code][p]) || 'NOME';
+              items.push(mk(`${team.code}-${String(p).padStart(2, '0')}`, 'player', pName, { ...base, shiny: false, position: p }));
             }
           }
           groups.push({ id: team.code, label: team.name, flag: team.flag, groupId: grp.id, groupLabel: grp.label, type: 'player', placeholder: team.placeholder || false, placeholderNote: team.note || '', stickers: items });
